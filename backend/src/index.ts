@@ -1,7 +1,11 @@
+import dotenv from "dotenv";
 import express from "express";
+
+dotenv.config();
 
 // Creamos la aplicación de Express
 const app = express();
+const PORT = process.env.PORT || 3000;
 
 // Middleware
 app.use(express.json());
@@ -11,6 +15,6 @@ app.get("/", (req, res) => {
 });
 
 // El servidor escucha un puerto
-app.listen(3000, () => {
-  console.log("🚀 Servidor corriendo en http://localhost:3000");
+app.listen(PORT, () => {
+  console.log(`🚀 Servidor corriendo en http://localhost:${3000}`);
 });
