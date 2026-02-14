@@ -1,5 +1,6 @@
 import dotenv from "dotenv";
 import express from "express";
+import { connectDB } from "./db/connection";
 
 dotenv.config();
 
@@ -13,6 +14,9 @@ app.use(express.json());
 app.get("/", (req, res) => {
   res.json({ message: "Servidor funcionando" });
 });
+
+// Conectamos con la BBDD
+connectDB();
 
 // El servidor escucha un puerto
 app.listen(PORT, () => {
