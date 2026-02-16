@@ -27,3 +27,18 @@ export const createUser = async (req: Request, res: Response) => {
     });
   }
 };
+
+export const getAllUsers = async (req: Request, res: Response) => {
+  try {
+    const users = await User.find();
+
+    res.status(201).json({
+      message: "Usuarios obtenidos correctamente",
+      data: users,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Error al obtener los usuarios",
+    });
+  }
+};
