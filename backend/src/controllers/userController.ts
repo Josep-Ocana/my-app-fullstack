@@ -16,9 +16,10 @@ export const createUser = async (req: Request, res: Response) => {
     });
   } catch (error) {
     if (error instanceof ZodError) {
+      const messages = error.issues.map((issue) => issue.message);
       return res.status(400).json({
         message: "Datos inválidos",
-        errors: error.issues,
+        errors: messages,
       });
     }
 
@@ -61,6 +62,37 @@ export const getUserById = async (req: Request, res: Response) => {
     res.status(500).json({
       message: "Error al obtener Usuario",
     });
+  }
+};
+
+export const updatedUser = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+
+    //  Validamos los datos enviados por el cliente
+    const validatedData = UserSchema.partial().parse(req.body);
+
+    const updatedUser = await User.findByIdAndUpdate(id, validatedData, {
+      new: true, // Retorna el documento actualizado
+      runValidators: true, // Valida los cambios
+    });
+
+    if (!updatedUser) {
+      return res.status(404).json("Usuario no encontrado");
+    }
+
+    res.status(200).json({
+      message: `Usuario Actualizado correctamente`,
+      data: updatedUser,
+    });
+  } catch (error) {
+    if (error instanceof ZodError) {
+      const messages = error.issues.map((issue) => issue.message);
+      res.status(400).json({
+        message: "Datos inválidos",
+        errors: messages,
+      });
+    }
   }
 };
 

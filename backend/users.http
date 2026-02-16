@@ -2,14 +2,14 @@
 @port = 3000
 @base_url = http://{{hostname}}:{{port}}/api/users
 
-@id = 69930a6b3e264d909fcdac95
+@id = 699315b4a070ad7b9ce525d8
 
 ### Crear usuario
 POST {{base_url}}
 Content-Type: application/json
 
 {
-  "name": "Emily"
+  "name": "Anna"
 }
 
 ### Obtener todos los usuarios
@@ -19,3 +19,15 @@ Content-Type: application/json
 ### Obtener usuario por su Id
 GET {{base_url}}/{{id}}
 Content-Type: application/json
+
+### Eliminar usuario por su Id
+DELETE {{base_url}}/{{id}}
+Content-Type: application/json
+
+### Actualizar usuario
+PUT {{base_url}}/{{id}}
+Content-Type: application/json
+
+{ 
+  "name": "Pi"
+  }
