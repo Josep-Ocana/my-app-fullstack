@@ -2,10 +2,20 @@
 @port = 3000
 @base_url = http://{{hostname}}:{{port}}/api/users
 
+@id = 69930a6b3e264d909fcdac95
+
 ### Crear usuario
 POST {{base_url}}
 Content-Type: application/json
 
 {
-  "name": "Pepe"
+  "name": "Emily"
 }
+
+### Obtener todos los usuarios
+GET {{base_url}}
+Content-Type: application/json
+
+### Obtener usuario por su Id
+GET {{base_url}}/{{id}}
+Content-Type: application/json
