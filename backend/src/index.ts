@@ -1,6 +1,7 @@
 import dotenv from "dotenv";
 import express from "express";
 import { connectDB } from "./db/connection";
+import userRouter from "./routes/userRoutes";
 
 dotenv.config();
 
@@ -14,6 +15,8 @@ app.use(express.json());
 app.get("/", (req, res) => {
   res.json({ message: "Servidor funcionando" });
 });
+
+app.use("/api/users", userRouter);
 
 // Conectamos con la BBDD
 connectDB();

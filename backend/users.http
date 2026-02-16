@@ -1,0 +1,11 @@
+@hostname = localhost
+@port = 3000
+@base_url = http://{{hostname}}:{{port}}/api/users
+
+### Crear usuario
+POST {{base_url}}
+Content-Type: application/json
+
+{
+  "name": "Celeste"
+}
