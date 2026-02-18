@@ -2,14 +2,16 @@
 @port = 3000
 @base_url = http://{{hostname}}:{{port}}/api/users
 
-@id = 699315b4a070ad7b9ce525d8
+@id = 6995d087647000d52ed85a07
 
 ### Crear usuario
 POST {{base_url}}
 Content-Type: application/json
 
 {
-  "name": "Anna"
+  "name": "Josep",
+  "email": "josep@correo.com",
+  "phone": "444456789"
 }
 
 ### Obtener todos los usuarios
@@ -29,5 +31,7 @@ PUT {{base_url}}/{{id}}
 Content-Type: application/json
 
 { 
-  "name": "Pi"
+  "name": "Joseppe actualizado",
+  "email": "josepactualizado@correo.com",
+  "phone": "696969699"
   }
