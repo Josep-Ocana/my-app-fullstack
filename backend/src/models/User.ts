@@ -1,8 +1,10 @@
+import bcrypt from "bcrypt";
 import mongoose, { Document, Schema } from "mongoose";
 import z from "zod";
 
 export const UserSchema = z.object({
   name: z.string().min(3, "El nombre debe tener al menos 3 caracteres"),
+  password: z.string().min(6, "La contraseña debe tener al menos 6 dígitos"),
   email: z.email("El email debe ser válido"),
   phone: z.string().min(9, "El telefono debe tener al menos 9 dígitos"),
 });
@@ -21,7 +23,12 @@ const userSchema = new Schema<IUserDocument>(
       type: String,
       required: [true, "El nombre es requerido"],
       trim: true,
-      minLength: 3,
+      minlength: 3,
+    },
+    password: {
+      type: String,
+      required: [true, "La contraseña es requerida"],
+      minlength: 6,
     },
     email: {
       type: String,
@@ -35,10 +42,24 @@ const userSchema = new Schema<IUserDocument>(
       required: [true, "El teléfono es requerido"],
       unique: true,
       trim: true,
-      minLength: 9,
+      minlength: 9,
     },
   },
   { timestamps: true },
 );
+
+// Middleware para hashear la contraseña antes de guardar
+userSchema.pre("save", async function () {
+  if (!this.isModified("password")) {
+    return;
+  }
+
+  try {
+    const salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, salt);
+  } catch (error) {
+    throw error;
+  }
+});
 
 export const User = mongoose.model<IUserDocument>("User", userSchema);

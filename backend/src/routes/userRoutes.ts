@@ -4,7 +4,7 @@ import {
   deleteUser,
   getAllUsers,
   getUserById,
-  updatedUser,
+  updateUser,
 } from "../controllers/userController";
 
 const userRouter = Router();
@@ -22,6 +22,6 @@ userRouter.get("/:id", getUserById);
 userRouter.delete("/:id", deleteUser);
 
 // Actualizar usuario
-userRouter.put("/:id", updatedUser);
+userRouter.put("/:id", updateUser);
 
 export default userRouter;
