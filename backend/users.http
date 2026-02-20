@@ -12,7 +12,7 @@ Content-Type: application/json
   "name": "anna",
   "password": "password",
   "email": "anna@correo.com",
-  "phone": "523456789"
+  "phone": "123456789"
 }
 
 ### Obtener todos los usuarios
