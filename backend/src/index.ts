@@ -1,3 +1,4 @@
+import cors from "cors";
 import dotenv from "dotenv";
 import express from "express";
 import { connectDB } from "./db/connection";
@@ -10,6 +11,11 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Middleware
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+  }),
+);
 app.use(express.json());
 
 app.get("/", (req, res) => {
