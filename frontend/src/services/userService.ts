@@ -8,6 +8,5 @@ export default api;
 
 export const getUsers = async () => {
   const response = await api.get("/users");
-  console.log(response);
   return response.data.data;
 };
