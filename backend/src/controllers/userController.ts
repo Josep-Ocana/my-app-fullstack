@@ -40,7 +40,7 @@ export const createUser = async (req: Request, res: Response) => {
 
 export const getAllUsers = async (req: Request, res: Response) => {
   try {
-    const users = await User.find().select("-password");
+    const users = await User.find();
 
     res.status(200).json({
       message: "Usuarios obtenidos correctamente",
@@ -57,7 +57,7 @@ export const getUserById = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
 
-    const user = await User.findById(id).select("-password");
+    const user = await User.findById(id);
 
     if (!user) {
       return res.status(404).json({
@@ -92,7 +92,7 @@ export const updateUser = async (req: Request, res: Response) => {
     const updatedUser = await User.findByIdAndUpdate(id, validatedData, {
       new: true, // Retorna el documento actualizado
       runValidators: true, // Valida los cambios
-    }).select("-password");
+    });
 
     if (!updatedUser) {
       return res.status(404).json("Usuario no encontrado");

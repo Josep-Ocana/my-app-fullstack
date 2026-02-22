@@ -29,6 +29,7 @@ const userSchema = new Schema<IUserDocument>(
       type: String,
       required: [true, "La contraseña es requerida"],
       minlength: 6,
+      select: false, // Nunca se devuelve por defecto
     },
     email: {
       type: String,
