@@ -1,4 +1,5 @@
 import type { User } from "../types/user";
+import UserItem from "./UserItem";
 
 type UserListProps = {
   users: User[];
@@ -12,9 +13,7 @@ const UserList = ({ users }: UserListProps) => {
       ) : (
         <ul>
           {users.map((user) => (
-            <li key={user._id}>
-              {user.name} - {user.email} - {user.phone}
-            </li>
+            <UserItem key={user._id} user={user} />
           ))}
         </ul>
       )}
