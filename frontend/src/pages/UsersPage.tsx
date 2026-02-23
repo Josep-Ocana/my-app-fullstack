@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
+import UserList from "../components/UserList";
 import { getUsers } from "../services/userService";
 import type { User } from "../types/user";
 
 const UsersPage = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<String>("");
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -26,17 +27,7 @@ const UsersPage = () => {
   return (
     <div>
       <h1>Usurios</h1>
-      {users.length === 0 ? (
-        <p>No hay usuarios disponibles</p>
-      ) : (
-        <ul>
-          {users.map((user) => (
-            <li key={user._id}>
-              {user.name} - {user.email} - {user.phone}
-            </li>
-          ))}
-        </ul>
-      )}
+      <UserList users={users} />
     </div>
   );
 };
