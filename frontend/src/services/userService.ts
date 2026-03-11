@@ -16,3 +16,8 @@ export const createUser = async (newUser: User) => {
   const response = await api.post("/users", newUser);
   return response.data;
 };
+
+export const deleteUserService = async (id: string) => {
+  const response = await api.delete(`/users/${id}`);
+  return response.data;
+};

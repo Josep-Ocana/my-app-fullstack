@@ -1,5 +1,9 @@
 import { createContext, useEffect, useReducer } from "react";
-import { createUser, getUsers } from "../services/userService";
+import {
+  createUser,
+  deleteUserService,
+  getUsers,
+} from "../services/userService";
 import type { User } from "../types/user";
 import { initialState, userReducer } from "./userReducer";
 
@@ -49,8 +53,32 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  const deleteUser = async (id: User["_id"]) => {
+    dispatch({ type: "DELETE_USER_START" });
+    try {
+      await deleteUserService(id);
+      dispatch({ type: "DELETE_USER_SUCCESS", payload: id });
+    } catch (error) {
+      dispatch({
+        type: "DELETE_USER_ERROR",
+        payload: "Error al eliminar Usuario",
+      });
+    }
+  };
+
+  const updateUser = async (editingUser: User) => {};
+
   return (
-    <UsersContext.Provider value={{ users, loading, error, addUser }}>
+    <UsersContext.Provider
+      value={{
+        users,
+        loading,
+        error,
+        addUser,
+        deleteUser,
+        updateUser,
+      }}
+    >
       {children}
     </UsersContext.Provider>
   );
