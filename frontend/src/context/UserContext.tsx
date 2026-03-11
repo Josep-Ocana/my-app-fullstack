@@ -7,11 +7,14 @@ import {
 } from "../services/userService";
 import type { User } from "../types/user";
 
-// Type
+// Types
 type UsersContextType = {
   users: User[];
   loading: boolean;
   error: string | null;
+};
+
+type UsersActionsType = {
   addUser: (user: User) => void;
   deleteUser: (id: User["_id"]) => void;
   updateUser: (user: User) => void;
@@ -20,6 +23,7 @@ type UsersContextType = {
 
 // Context
 export const UsersContext = createContext<UsersContextType | null>(null);
+export const UsersActions = createContext<UsersActionsType | null>(null);
 
 // Provider
 export function UserProvider({ children }: { children: React.ReactNode }) {
@@ -78,13 +82,18 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
         users,
         loading,
         error,
-        addUser,
-        deleteUser,
-        updateUser,
-        fetchUsers,
       }}
     >
-      {children}
+      <UsersActions.Provider
+        value={{
+          addUser,
+          deleteUser,
+          updateUser,
+          fetchUsers,
+        }}
+      >
+        {children}
+      </UsersActions.Provider>
     </UsersContext.Provider>
   );
 }
