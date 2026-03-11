@@ -1,11 +1,11 @@
 import { createContext, useEffect, useReducer } from "react";
+import { initialState, userReducer } from "../reducers/userReducer";
 import {
   createUser,
   deleteUserService,
   getUsers,
 } from "../services/userService";
 import type { User } from "../types/user";
-import { initialState, userReducer } from "./userReducer";
 
 // Type
 type UsersContextType = {
@@ -15,6 +15,7 @@ type UsersContextType = {
   addUser: (user: User) => void;
   deleteUser: (id: User["_id"]) => void;
   updateUser: (user: User) => void;
+  fetchUsers: () => Promise<void>;
 };
 
 // Context
@@ -25,21 +26,24 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
   const [state, dispatch] = useReducer(userReducer, initialState);
   const { users, loading, error } = state;
 
+  const fetchUsers = async () => {
+    dispatch({ type: "FETCH_USERS_START" });
+
+    try {
+      const fetchedUsers = await getUsers();
+
+      dispatch({ type: "FETCH_USERS_SUCCESS", payload: fetchedUsers });
+    } catch (error) {
+      dispatch({
+        type: "FETCH_USERS_ERROR",
+        payload: "Error al cargar Usuarios",
+      });
+    }
+  };
+
   // Cargar los usuarios desde la Base de datos
   useEffect(() => {
-    const loadUsers = async () => {
-      dispatch({ type: "FETCH_USERS_START" });
-      try {
-        const users = await getUsers();
-        dispatch({ type: "FETCH_USERS_SUCCESS", payload: users });
-      } catch (error) {
-        dispatch({
-          type: "FETCH_USERS_ERROR",
-          payload: "Error al cargar Usuarios",
-        });
-      }
-    };
-    loadUsers();
+    fetchUsers();
   }, []);
 
   // Funciones
@@ -77,6 +81,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
         addUser,
         deleteUser,
         updateUser,
+        fetchUsers,
       }}
     >
       {children}
