@@ -23,8 +23,8 @@ type UsersActionsType = {
 };
 
 // Context
-export const UsersContext = createContext<UsersContextType | null>(null);
-export const UsersActions = createContext<UsersActionsType | null>(null);
+export const UsersStateContext = createContext<UsersContextType | null>(null);
+export const UsersActionsContext = createContext<UsersActionsType | null>(null);
 
 // Provider
 export function UserProvider({ children }: { children: React.ReactNode }) {
@@ -89,14 +89,14 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <UsersContext.Provider
+    <UsersStateContext.Provider
       value={{
         users,
         loading,
         error,
       }}
     >
-      <UsersActions.Provider
+      <UsersActionsContext.Provider
         value={{
           addUser,
           deleteUser,
@@ -105,7 +105,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
         }}
       >
         {children}
-      </UsersActions.Provider>
-    </UsersContext.Provider>
+      </UsersActionsContext.Provider>
+    </UsersStateContext.Provider>
   );
 }
