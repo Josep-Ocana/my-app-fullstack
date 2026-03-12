@@ -22,7 +22,7 @@ export type Action =
   | { type: "DELETE_USER_START" }
   | { type: "DELETE_USER_SUCCESS"; payload: User["_id"] }
   | { type: "DELETE_USER_ERROR"; payload: string }
-  | { type: "UPDATE_USER_START"; payload: User }
+  | { type: "UPDATE_USER_START" }
   | { type: "UPDATE_USER_SUCCESS"; payload: User }
   | { type: "UPDATE_USER_ERROR"; payload: string };
 

@@ -1,9 +1,10 @@
 import { createContext, useEffect, useReducer } from "react";
 import { initialState, userReducer } from "../reducers/userReducer";
 import {
-  createUser,
+  addUserService,
   deleteUserService,
   getUsers,
+  updateUserService,
 } from "../services/userService";
 import type { User } from "../types/user";
 
@@ -54,18 +55,18 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
   const addUser = async (newUser: User) => {
     dispatch({ type: "ADD_USER_START" });
     try {
-      const createdUser = await createUser(newUser);
+      const createdUser = await addUserService(newUser);
       dispatch({ type: "ADD_USER_SUCCESS", payload: createdUser });
     } catch (error) {
       dispatch({ type: "ADD_USER_ERROR", payload: "Error al añadir Usuario" });
     }
   };
 
-  const deleteUser = async (id: User["_id"]) => {
+  const deleteUser = async (UserId: User["_id"]) => {
     dispatch({ type: "DELETE_USER_START" });
     try {
-      await deleteUserService(id);
-      dispatch({ type: "DELETE_USER_SUCCESS", payload: id });
+      await deleteUserService(UserId);
+      dispatch({ type: "DELETE_USER_SUCCESS", payload: UserId });
     } catch (error) {
       dispatch({
         type: "DELETE_USER_ERROR",
@@ -74,7 +75,18 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  const updateUser = async (editingUser: User) => {};
+  const updateUser = async (editUser: User) => {
+    dispatch({ type: "UPDATE_USER_START" });
+    try {
+      const updatedUser = await updateUserService(editUser);
+      dispatch({ type: "UPDATE_USER_SUCCESS", payload: updatedUser });
+    } catch (error) {
+      dispatch({
+        type: "UPDATE_USER_ERROR",
+        payload: "Error al actualizar Usuario",
+      });
+    }
+  };
 
   return (
     <UsersContext.Provider
