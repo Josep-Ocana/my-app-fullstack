@@ -1,4 +1,4 @@
-import { createContext, useEffect, useReducer } from "react";
+import { createContext, useCallback, useEffect, useReducer } from "react";
 import { initialState, userReducer } from "../reducers/userReducer";
 import {
   addUserService,
@@ -6,7 +6,7 @@ import {
   getUsers,
   updateUserService,
 } from "../services/userService";
-import type { User } from "../types/user";
+import type { NewUser, User } from "../types/user";
 
 // Types
 type UsersContextType = {
@@ -16,7 +16,7 @@ type UsersContextType = {
 };
 
 type UsersActionsType = {
-  addUser: (user: User) => void;
+  addUser: (user: NewUser) => void;
   deleteUser: (id: User["_id"]) => void;
   updateUser: (user: User) => void;
   fetchUsers: () => Promise<void>;
@@ -31,7 +31,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
   const [state, dispatch] = useReducer(userReducer, initialState);
   const { users, loading, error } = state;
 
-  const fetchUsers = async () => {
+  const fetchUsers = useCallback(async () => {
     dispatch({ type: "FETCH_USERS_START" });
 
     try {
@@ -44,7 +44,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
         payload: "Error al cargar Usuarios",
       });
     }
-  };
+  }, [dispatch]);
 
   // Cargar los usuarios desde la Base de datos
   useEffect(() => {
@@ -52,13 +52,20 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   // Funciones
-  const addUser = async (newUser: User) => {
+  const addUser = async (newUser: NewUser) => {
     dispatch({ type: "ADD_USER_START" });
     try {
       const createdUser = await addUserService(newUser);
-      dispatch({ type: "ADD_USER_SUCCESS", payload: createdUser });
+
+      dispatch({
+        type: "ADD_USER_SUCCESS",
+        payload: createdUser,
+      });
     } catch (error) {
-      dispatch({ type: "ADD_USER_ERROR", payload: "Error al añadir Usuario" });
+      dispatch({
+        type: "ADD_USER_ERROR",
+        payload: "Error al añadir Usuario",
+      });
     }
   };
 

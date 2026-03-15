@@ -1,5 +1,5 @@
 import axios from "axios";
-import type { User } from "../types/user";
+import type { NewUser, User } from "../types/user";
 
 const api = axios.create({
   baseURL: "http://localhost:3000/api",
@@ -12,9 +12,9 @@ export const getUsers = async () => {
   return response.data.data;
 };
 
-export const addUserService = async (newUser: User) => {
+export const addUserService = async (newUser: NewUser) => {
   const response = await api.post("/users", newUser);
-  return response.data;
+  return response.data.data;
 };
 
 export const deleteUserService = async (id: string) => {
@@ -24,5 +24,5 @@ export const deleteUserService = async (id: string) => {
 
 export const updateUserService = async (user: User) => {
   const response = await api.put(`/users/${user._id}`, user);
-  return response.data;
+  return response.data.data;
 };
