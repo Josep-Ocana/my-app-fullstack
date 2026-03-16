@@ -3,7 +3,7 @@ import UserList from "../components/UserList";
 import { useUsers } from "../hook/useUsers";
 
 const UsersPage = () => {
-  const { loading, error, fetchUsers } = useUsers();
+  const { users, loading, error, fetchUsers } = useUsers();
 
   useEffect(() => {
     fetchUsers();
