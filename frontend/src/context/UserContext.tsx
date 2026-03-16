@@ -6,21 +6,12 @@ import {
   getUsers,
   updateUserService,
 } from "../services/userService";
-import type { NewUser, User } from "../types/user";
-
-// Types
-type UsersContextType = {
-  users: User[];
-  loading: boolean;
-  error: string | null;
-};
-
-type UsersActionsType = {
-  addUser: (user: NewUser) => void;
-  deleteUser: (id: User["_id"]) => void;
-  updateUser: (user: User) => void;
-  fetchUsers: () => Promise<void>;
-};
+import type {
+  NewUser,
+  User,
+  UsersActionsType,
+  UsersContextType,
+} from "../types/user";
 
 // Context
 export const UsersStateContext = createContext<UsersContextType | null>(null);
