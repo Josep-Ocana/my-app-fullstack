@@ -52,11 +52,14 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
         type: "ADD_USER_SUCCESS",
         payload: createdUser,
       });
-    } catch (error) {
-      dispatch({
-        type: "ADD_USER_ERROR",
-        payload: "Error al añadir Usuario",
-      });
+    } catch (error: any) {
+      if (error.response?.status !== 400) {
+        dispatch({
+          type: "ADD_USER_ERROR",
+          payload: error.response?.data.message || "Error al añadir Usuario",
+        });
+      }
+      throw error;
     }
   };
 

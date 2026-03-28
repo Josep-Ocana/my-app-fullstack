@@ -1,9 +1,10 @@
 import { useEffect } from "react";
+import UserForm from "../components/UserForm";
 import UserList from "../components/UserList";
 import { useUsers } from "../hook/useUsers";
 
 const UsersPage = () => {
-  const { users, loading, error, fetchUsers } = useUsers();
+  const { loading, error, fetchUsers } = useUsers();
 
   useEffect(() => {
     fetchUsers();
@@ -17,7 +18,7 @@ const UsersPage = () => {
 
       {loading && <p>Cargando Usuarios</p>}
       {error && <p className="text-red-500">{error}</p>}
-
+      <UserForm />
       <UserList />
     </div>
   );

@@ -15,7 +15,7 @@ export type UsersContextType = {
 };
 
 export type UsersActionsType = {
-  addUser: (user: User) => void;
+  addUser: (user: NewUser) => void;
   deleteUser: (id: User["_id"]) => void;
   updateUser: (user: User) => void;
   fetchUsers: () => Promise<void>;
