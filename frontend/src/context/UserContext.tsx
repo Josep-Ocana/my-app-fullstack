@@ -1,3 +1,4 @@
+import axios, { AxiosError } from "axios";
 import { createContext, useCallback, useEffect, useReducer } from "react";
 import { initialState, userReducer } from "../reducers/userReducer";
 import {
@@ -12,6 +13,10 @@ import type {
   UsersActionsType,
   UsersContextType,
 } from "../types/user";
+
+interface ApiError {
+  message: string;
+}
 
 // Context
 export const UsersStateContext = createContext<UsersContextType | null>(null);
@@ -52,11 +57,23 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
         type: "ADD_USER_SUCCESS",
         payload: createdUser,
       });
-    } catch (error: any) {
-      if (error.response?.status !== 400) {
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const axiosError = error as AxiosError<ApiError>;
+        const status = axiosError.response?.status;
+        const message =
+          axiosError.response?.data?.message || "Error al añadir Usuario";
+
+        if (status !== 400) {
+          dispatch({
+            type: "ADD_USER_ERROR",
+            payload: message,
+          });
+        }
+      } else {
         dispatch({
           type: "ADD_USER_ERROR",
-          payload: error.response?.data.message || "Error al añadir Usuario",
+          payload: "Error inesperado en la aplicación",
         });
       }
       throw error;
