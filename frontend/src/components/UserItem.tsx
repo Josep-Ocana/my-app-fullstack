@@ -6,35 +6,35 @@ type UserItemProps = {
 };
 
 const UserItem = ({ user }: UserItemProps) => {
-  const { addUser, deleteUser, updateUser } = useUsers();
+  const { deleteUser, updateUser } = useUsers();
+
+  const handleDelete = () => {
+    if (window.confirm(`Borrar el usuario ${user.name}?`)) {
+      deleteUser(user._id);
+    }
+  };
+
   return (
-    <li>
-      <div>
-        <span>
-          {user.name} - {user.email} - {user.phone}
-        </span>
-        <div>
+    <li className="border-b hover:bg-gray-100 transition-colors p-2">
+      {/* Contenedor de Información */}
+      <div className=" flex justify-between w-full">
+        <div className="flex items-center gap-4">
+          <p className="font-bold text-gray-800">{user.name} </p>
+          <span className="text-gray-300">|</span>
+          <p className="text-sm text-gray-600">
+            {user.email} <span className="mx-1">-</span>
+            {user.phone}
+          </p>
+        </div>
+        {/* Contenedor de Acciones */}
+        <div className="flex gap-2">
           <button
-            className="bg-green-500 text-center text-white rounded p-2"
-            onClick={() => {
-              const randomNum = Math.floor(Math.random() * 10000);
-              addUser({
-                name: `Usuario ${randomNum}`,
-                email: `usuario${randomNum}@test.com`,
-                phone: `600${randomNum.toString().padStart(6, "0")}`,
-                password: "123456",
-              });
-            }}
-          >
-            Agregar
-          </button>
-          <button
-            className="bg-red-800 text-center text-white rounded p-2"
-            onClick={() => deleteUser(user._id)}
+            className="bg-red-600 hover:bg-red-700  text-center text-white rounded px-3 py-1 transition-colors"
+            onClick={() => handleDelete()}
           >
             Eliminar
           </button>
-          <button
+          {/* <button
             className="bg-orange-500 text-center text-white rounded p-2"
             onClick={() =>
               updateUser({
@@ -44,7 +44,7 @@ const UserItem = ({ user }: UserItemProps) => {
             }
           >
             Actualizar
-          </button>
+          </button> */}
         </div>
       </div>
     </li>

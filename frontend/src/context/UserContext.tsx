@@ -48,6 +48,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   // Funciones
+  // Añadir usuario
   const addUser = async (newUser: NewUser) => {
     dispatch({ type: "ADD_USER_START" });
     try {
@@ -80,19 +81,42 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  // Borrar Usuario
   const deleteUser = async (UserId: User["_id"]) => {
     dispatch({ type: "DELETE_USER_START" });
+
     try {
+      // 1 Llamada al servicio(axios)
       await deleteUserService(UserId);
+
+      // 2. Si todo va bien, actualizamos el estado global
       dispatch({ type: "DELETE_USER_SUCCESS", payload: UserId });
     } catch (error) {
-      dispatch({
-        type: "DELETE_USER_ERROR",
-        payload: "Error al eliminar Usuario",
-      });
+      if (axios.isAxiosError(error)) {
+        // 3. Aqui le decimos a TS el tipo de dato que tendrá error: ApiError definido arriba
+        const axiosError = error as AxiosError<ApiError>;
+
+        // 4. Ahora message será reconocido correctamente
+        const status = axiosError.response?.status;
+        const message =
+          axiosError.response?.data?.message || "Error al Borrar Usuario";
+
+        if (status !== 400) {
+          dispatch({
+            type: "DELETE_USER_ERROR",
+            payload: message,
+          });
+        }
+      } else {
+        dispatch({
+          type: "DELETE_USER_ERROR",
+          payload: "Error inesperado en la aplicación",
+        });
+      }
     }
   };
 
+  // Actualizar Usuario
   const updateUser = async (editUser: User) => {
     dispatch({ type: "UPDATE_USER_START" });
     try {

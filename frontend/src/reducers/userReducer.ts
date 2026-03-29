@@ -63,6 +63,7 @@ export function userReducer(state: State, action: Action): State {
     case "ADD_USER_ERROR":
       return {
         ...state,
+        loading: false,
         error: action.payload,
       };
 
@@ -82,6 +83,7 @@ export function userReducer(state: State, action: Action): State {
     case "DELETE_USER_ERROR":
       return {
         ...state,
+        loading: false,
         error: action.payload,
       };
 
@@ -103,6 +105,7 @@ export function userReducer(state: State, action: Action): State {
     case "UPDATE_USER_ERROR":
       return {
         ...state,
+        loading: false,
         error: action.payload,
       };
 
