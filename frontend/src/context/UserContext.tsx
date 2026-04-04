@@ -5,7 +5,6 @@ import {
   addUserService,
   deleteUserService,
   getUsers,
-  updateUserService,
 } from "../services/userService";
 import type {
   NewUser,
@@ -25,7 +24,7 @@ export const UsersActionsContext = createContext<UsersActionsType | null>(null);
 // Provider
 export function UserProvider({ children }: { children: React.ReactNode }) {
   const [state, dispatch] = useReducer(userReducer, initialState);
-  const { users, loading, error } = state;
+  const { users, loading, error, editingUser } = state;
 
   const fetchUsers = useCallback(async () => {
     dispatch({ type: "FETCH_USERS_START" });
@@ -117,17 +116,13 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
   };
 
   // Actualizar Usuario
-  const updateUser = async (editUser: User) => {
-    dispatch({ type: "UPDATE_USER_START" });
-    try {
-      const updatedUser = await updateUserService(editUser);
-      dispatch({ type: "UPDATE_USER_SUCCESS", payload: updatedUser });
-    } catch (error) {
-      dispatch({
-        type: "UPDATE_USER_ERROR",
-        payload: "Error al actualizar Usuario",
-      });
-    }
+  const selectUserToEdit = (user: User) => {
+    dispatch({ type: "SET_EDITING_USER", payload: user });
+  };
+
+  // Cancelar Actualización Usuario
+  const cancelEdit = () => {
+    dispatch({ type: "SET_EDITING_USER", payload: null });
   };
 
   return (
@@ -136,14 +131,16 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
         users,
         loading,
         error,
+        editingUser,
       }}
     >
       <UsersActionsContext.Provider
         value={{
           addUser,
           deleteUser,
-          updateUser,
           fetchUsers,
+          selectUserToEdit,
+          cancelEdit,
         }}
       >
         {children}

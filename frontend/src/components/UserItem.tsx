@@ -6,7 +6,7 @@ type UserItemProps = {
 };
 
 const UserItem = ({ user }: UserItemProps) => {
-  const { deleteUser, updateUser } = useUsers();
+  const { deleteUser, selectUserToEdit } = useUsers();
 
   const handleDelete = () => {
     if (window.confirm(`Borrar el usuario ${user.name}?`)) {
@@ -34,17 +34,13 @@ const UserItem = ({ user }: UserItemProps) => {
           >
             Eliminar
           </button>
-          {/* <button
+          {/* Botón Actualizar */}
+          <button
             className="bg-orange-500 text-center text-white rounded p-2"
-            onClick={() =>
-              updateUser({
-                ...user,
-                name: user.name + "🤞",
-              })
-            }
+            onClick={() => selectUserToEdit(user)}
           >
-            Actualizar
-          </button> */}
+            Editar
+          </button>
         </div>
       </div>
     </li>

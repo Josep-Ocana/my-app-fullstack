@@ -4,12 +4,14 @@ export type State = {
   users: User[];
   loading: boolean;
   error: string | null;
+  editingUser: User | null;
 };
 
 export const initialState: State = {
   users: [],
   loading: true,
   error: null,
+  editingUser: null,
 };
 
 export type Action =
@@ -24,7 +26,8 @@ export type Action =
   | { type: "DELETE_USER_ERROR"; payload: string }
   | { type: "UPDATE_USER_START" }
   | { type: "UPDATE_USER_SUCCESS"; payload: User }
-  | { type: "UPDATE_USER_ERROR"; payload: string };
+  | { type: "UPDATE_USER_ERROR"; payload: string }
+  | { type: "SET_EDITING_USER"; payload: User | null };
 
 export function userReducer(state: State, action: Action): State {
   switch (action.type) {
@@ -107,6 +110,12 @@ export function userReducer(state: State, action: Action): State {
         ...state,
         loading: false,
         error: action.payload,
+      };
+
+    case "SET_EDITING_USER":
+      return {
+        ...state,
+        editingUser: action.payload,
       };
 
     default:

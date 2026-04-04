@@ -1,9 +1,10 @@
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useUsers } from "../hook/useUsers";
 import type { NewUser } from "../types/user";
 
 const UserForm = () => {
-  const { addUser } = useUsers();
+  const { addUser, editingUser } = useUsers();
 
   // Inicializamos el hook de formularios
   const {
@@ -13,6 +14,16 @@ const UserForm = () => {
     setError,
     formState: { errors, isSubmitting },
   } = useForm<NewUser>();
+
+  useEffect(() => {
+    if (editingUser) {
+      // Rellenamos el formulario con los datos del usuario a editar
+      reset(editingUser);
+    } else {
+      // Si no hay usuario editando (null), limpiamos el formulario
+      reset();
+    }
+  }, [editingUser, reset]);
 
   // Esta función se ejecuta solo si pasamos las validaciones
   const onSubmit = async (data: NewUser) => {
@@ -33,6 +44,13 @@ const UserForm = () => {
       }
     }
   };
+
+  // Lógica para el texto del botón
+  let buttonText = editingUser ? "Guardar Cambios" : "Crear Usuario";
+
+  if (isSubmitting) {
+    buttonText = editingUser ? "Guardando..." : "Creando...";
+  }
 
   return (
     <form
@@ -107,7 +125,7 @@ const UserForm = () => {
         disabled={isSubmitting}
         className={`rounded p-2 text-white uppercase w-full ${isSubmitting ? "bg-gray-300" : "bg-blue-700"}`}
       >
-        {isSubmitting ? "Creando..." : "Crear Usuario"}
+        {buttonText}
       </button>
     </form>
   );

@@ -12,11 +12,13 @@ export type UsersContextType = {
   users: User[];
   loading: boolean;
   error: string | null;
+  editingUser: User | null;
 };
 
 export type UsersActionsType = {
   addUser: (user: NewUser) => void;
   deleteUser: (id: User["_id"]) => void;
-  updateUser: (user: User) => void;
   fetchUsers: () => Promise<void>;
+  selectUserToEdit: (user: User) => void;
+  cancelEdit: () => void;
 };
