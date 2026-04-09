@@ -104,6 +104,7 @@ export function userReducer(state: State, action: Action): State {
           user._id === action.payload._id ? action.payload : user,
         ),
         error: null,
+        editingUser: null,
       };
     case "UPDATE_USER_ERROR":
       return {

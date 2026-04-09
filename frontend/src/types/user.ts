@@ -21,4 +21,5 @@ export type UsersActionsType = {
   fetchUsers: () => Promise<void>;
   selectUserToEdit: (user: User) => void;
   cancelEdit: () => void;
+  updateUser: (user: User) => void;
 };

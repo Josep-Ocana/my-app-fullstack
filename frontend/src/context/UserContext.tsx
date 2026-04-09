@@ -5,6 +5,7 @@ import {
   addUserService,
   deleteUserService,
   getUsers,
+  updateUserService,
 } from "../services/userService";
 import type {
   NewUser,
@@ -115,7 +116,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  // Actualizar Usuario
+  // Capturar Usuario para actualizar
   const selectUserToEdit = (user: User) => {
     dispatch({ type: "SET_EDITING_USER", payload: user });
   };
@@ -123,6 +124,40 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
   // Cancelar Actualización Usuario
   const cancelEdit = () => {
     dispatch({ type: "SET_EDITING_USER", payload: null });
+  };
+
+  // Actualizar Usuario
+  const updateUser = async (user: User) => {
+    dispatch({ type: "UPDATE_USER_START" });
+    try {
+      // 1 Llamada al servicio(axios)
+      const updatedUser = await updateUserService(user);
+
+      // 2. Si todo va bien, actualizamos el estado global
+      dispatch({ type: "UPDATE_USER_SUCCESS", payload: updatedUser });
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        // 3. Aqui le decimos a TS el tipo de dato que tendrá error: ApiError definido arriba
+        const axiosError = error as AxiosError<ApiError>;
+
+        // 4. Ahora message será reconocido correctamente
+        const status = axiosError.response?.status;
+        const message =
+          axiosError.response?.data?.message || "Error al Actualizar Usuario";
+
+        if (status !== 400) {
+          dispatch({
+            type: "UPDATE_USER_ERROR",
+            payload: message,
+          });
+        }
+      } else {
+        dispatch({
+          type: "UPDATE_USER_ERROR",
+          payload: "Error inesperado en la aplicación",
+        });
+      }
+    }
   };
 
   return (
@@ -141,6 +176,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
           fetchUsers,
           selectUserToEdit,
           cancelEdit,
+          updateUser,
         }}
       >
         {children}

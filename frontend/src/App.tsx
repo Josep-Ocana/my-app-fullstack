@@ -1,11 +1,15 @@
 import { UserProvider } from "./context/UserContext";
+import { AlertProvider, AlertContainer } from "./components/alerta";
 import UsersPage from "./pages/UsersPage";
 
 function App() {
   return (
-    <UserProvider>
-      <UsersPage />
-    </UserProvider>
+    <AlertProvider>
+      <UserProvider>
+        <AlertContainer />
+        <UsersPage />
+      </UserProvider>
+    </AlertProvider>
   );
 }
 
