@@ -54,7 +54,7 @@ const ConfirmAlert = ({
       >
         {/* Header */}
         <div className="flex items-start gap-3 mb-4">
-          <AlertCircle className={`w-6 h-6 ${styles.icon} flex-shrink-0`} />
+          <AlertCircle className={`w-6 h-6 ${styles.icon} shrink-0`} />
           <div className="flex-1">
             <h3 className="font-bold text-gray-900">{title}</h3>
           </div>

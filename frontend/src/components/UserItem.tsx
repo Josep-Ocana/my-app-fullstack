@@ -46,7 +46,7 @@ const UserItem = ({ user }: UserItemProps) => {
       {/* Contenedor de Información */}
       <div className="flex justify-between w-full items-center">
         <div className="flex items-center gap-4 flex-1">
-          <div className="w-3 h-3 rounded-full bg-blue-500 flex-shrink-0"></div>
+          <div className="w-3 h-3 rounded-full bg-blue-500 shrink-0"></div>
           <div className="flex-1">
             <p className="font-bold text-gray-800">{user.name}</p>
             <p className="text-sm text-gray-600">

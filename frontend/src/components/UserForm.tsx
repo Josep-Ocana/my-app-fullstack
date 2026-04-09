@@ -2,12 +2,15 @@ import { AlertCircle } from "lucide-react";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useUsers } from "../hook/useUsers";
-import type { NewUser } from "../types/user";
+import type { NewUser, User } from "../types/user";
 import { useUserAlerts } from "./alerta/useUserAlerts";
 
 const UserForm = () => {
-  const { addUser, editingUser } = useUsers();
+  const { addUser, updateUser, editingUser, cancelEdit } = useUsers();
   const { showAlert } = useUserAlerts();
+
+  // Tipo union para el formulario: NewUser para crear, User para editar
+  type UserFormData = NewUser | User;
 
   // Inicializamos el hook de formularios
   const {
@@ -15,7 +18,7 @@ const UserForm = () => {
     handleSubmit,
     reset,
     formState: { errors, isSubmitting },
-  } = useForm<NewUser>();
+  } = useForm<UserFormData>();
 
   useEffect(() => {
     if (editingUser) {
@@ -28,17 +31,21 @@ const UserForm = () => {
   }, [editingUser, reset]);
 
   // Esta función se ejecuta solo si pasamos las validaciones
-  const onSubmit = async (data: NewUser) => {
+  const onSubmit = async (data: UserFormData) => {
     try {
-      await addUser(data);
+      if (editingUser) {
+        // Estamos editando un usuario existente
+        const userData = data as User;
+        await updateUser(userData);
+        showAlert("Usuario actualizado con éxito", "success", 3000);
+      } else {
+        // Estamos creando un nuevo usuario
+        const newUserData = data as NewUser;
+        await addUser(newUserData);
+        showAlert("Usuario creado con éxito", "success", 3000);
+      }
+
       reset(); // Limpiamos el formulario
-      showAlert(
-        editingUser
-          ? "Usuario actualizado con éxito"
-          : "Usuario creado con éxito",
-        "success",
-        3000,
-      );
     } catch (err: any) {
       const serverMessage = err.response?.data?.message;
       const errorMsg =
@@ -177,17 +184,33 @@ const UserForm = () => {
         )}
       </div>
 
-      <button
-        type="submit"
-        disabled={isSubmitting}
-        className={`rounded p-2 text-white uppercase w-full font-medium transition-colors ${
-          isSubmitting
-            ? "bg-gray-400 cursor-not-allowed"
-            : "bg-blue-700 hover:bg-blue-800"
-        }`}
-      >
-        {buttonText}
-      </button>
+      <div className="flex gap-3">
+        <button
+          type="submit"
+          disabled={isSubmitting}
+          className={`rounded p-2 text-white uppercase flex-1 font-medium transition-colors ${
+            isSubmitting
+              ? "bg-gray-400 cursor-not-allowed"
+              : "bg-blue-700 hover:bg-blue-800"
+          }`}
+        >
+          {buttonText}
+        </button>
+
+        {editingUser && (
+          <button
+            type="button"
+            onClick={() => {
+              cancelEdit();
+              reset();
+              showAlert("Edición cancelada", "info", 2000);
+            }}
+            className="rounded p-2 text-gray-700 bg-gray-200 hover:bg-gray-300 uppercase font-medium transition-colors px-4"
+          >
+            Cancelar
+          </button>
+        )}
+      </div>
     </form>
   );
 };
