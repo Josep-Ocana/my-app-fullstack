@@ -110,6 +110,10 @@ export const updateUser = async (req: Request, res: Response) => {
         errors: messages,
       });
     }
+
+    res.status(500).json({
+      message: "Error al actualizar el Usuario",
+    });
   }
 };
 
@@ -128,7 +132,7 @@ export const deleteUser = async (req: Request, res: Response) => {
     });
   } catch (error) {
     res.status(500).json({
-      message: "Error al obtener Usuario",
+      message: "Error al eliminar Usuario",
     });
   }
 };
