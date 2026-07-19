@@ -11,9 +11,14 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Middleware
+
+const allowedOrigins = (process.env.FRONTEND_URL || "")
+  .split(",")
+  .map((url) => url.trim());
+
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL,
+    origin: allowedOrigins,
   }),
 );
 app.use(express.json());
