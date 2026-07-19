@@ -6,8 +6,6 @@ import userRouter from "./routes/userRoutes";
 
 dotenv.config();
 
-console.log("FRONTEND_URL:", process.env.FRONTEND_URL);
-
 // Creamos la aplicación de Express
 const app = express();
 const PORT = process.env.PORT || 3000;
