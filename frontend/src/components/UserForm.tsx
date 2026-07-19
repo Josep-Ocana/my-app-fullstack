@@ -13,12 +13,19 @@ const UserForm = () => {
   type UserFormData = NewUser | User;
 
   // Inicializamos el hook de formularios
+  const emptyValues = {
+    password: "",
+    name: "",
+    email: "",
+    phone: "",
+  };
+
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors, isSubmitting },
-  } = useForm<UserFormData>();
+  } = useForm<UserFormData>({ defaultValues: emptyValues });
 
   useEffect(() => {
     if (editingUser) {
@@ -45,7 +52,7 @@ const UserForm = () => {
         showAlert("Usuario creado con éxito", "success", 3000);
       }
 
-      reset(); // Limpiamos el formulario
+      reset(emptyValues); // Limpiamos el formulario
     } catch (err: any) {
       const serverMessage = err.response?.data?.message;
       const errorMsg =
